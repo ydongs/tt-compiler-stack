@@ -21,7 +21,6 @@ jobs:
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git fetch --depth=1 origin gh-pages
           git checkout -b gh-pages origin/gh-pages
-          cp triton-architecture-diagram.html ./
           git add index.html
           git commit -m "Deploy single HTML file"
           git push origin gh-pages
