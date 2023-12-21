@@ -1,24 +1,28 @@
-name: Deploy to GitHub Pages
+name: Deploy HTML to GitHub Pages
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'triton-architecture-diagram.html'
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '12'
-
-    - name: Build and Deploy
-      uses: JamesIves/github-pages-deploy-action@4.1.4
-      with:
-        branch: gh-pages
-        folder: .
+      - name: Deploy HTML to gh-pages
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git fetch --depth=1 origin gh-pages
+          git checkout -b gh-pages origin/gh-pages
+          cp triton-architecture-diagram.html ./
+          git add index.html
+          git commit -m "Deploy single HTML file"
+          git push origin gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
